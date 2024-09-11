@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "dependency-injection-sample"
 include(":app")
- 
+include(":injectron")
