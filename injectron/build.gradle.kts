@@ -18,6 +18,7 @@ sourceSets {
 }
 
 dependencies {
+    implementation(libs.coroutine.core)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockk)
     testRuntimeOnly(libs.junit.jupiter.engine)
