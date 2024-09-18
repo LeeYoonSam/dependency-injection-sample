@@ -19,6 +19,7 @@ sourceSets {
 
 dependencies {
     testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockk)
     testRuntimeOnly(libs.junit.jupiter.engine)
 }
 
