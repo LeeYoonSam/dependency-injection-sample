@@ -19,6 +19,7 @@ sourceSets {
 
 dependencies {
     implementation(libs.coroutine.core)
+    implementation(libs.kotlin.reflect)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockk)
     testRuntimeOnly(libs.junit.jupiter.engine)
