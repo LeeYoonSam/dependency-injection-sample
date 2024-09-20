@@ -103,7 +103,7 @@ DI Container를 사용함으로써, 개발자는 비즈니스 로직에 더 집�
 5. 예외 처리: 재고 부족, 결제 실패 등의 예외 상황을 처리합니다.
 
 
-### 3. 생성자 주입 자동화
+### [3. 생성자 주입 자동화](./injectron/src/main/java/com/ys/injectron/auto/AutoConstructorInjection.kt)
 생성자 주입 자동화는 의존성 주입을 더 편리하고 효율적으로 만드는 중요한 기능
 
 이 코드는 생성자 주입 자동화를 구현한 DI 컨테이너입니다. 주요 특징과 작동 방식은 다음과 같습니다:
@@ -188,3 +188,30 @@ DI Container를 사용함으로써, 개발자는 비즈니스 로직에 더 집�
 - 성능 고려: 객체 생성 비용이 적고, 메모리 사용량이 크지 않은 경우. 
 - 테스트 용이성: 각 테스트 케이스마다 독립적인 인스턴스가 필요한 경우.
 
+### [5. 모듈 개념 도입](./injectron/src/main/java/com/ys/injectron/module/ModuleInstall.kt)
+1. @Injectable 어노테이션:
+   - 자동 주입이 가능한 클래스를 표시합니다.
+2. Module 인터페이스:
+   - 모듈 개념을 구현하기 위한 인터페이스입니다.
+3. DIContainer 클래스:
+   - dependencies: 모든 의존성을 저장하는 맵입니다. 
+   - singletons: 싱글톤 인스턴스를 저장하는 맵입니다.
+   - register: 일반 의존성을 등록합니다.
+   - registerSingleton: 싱글톤 의존성을 등록합니다.
+   - installModules: 모듈을 설치합니다.
+   - resolve: 의존성을 해결합니다. 등록된 의존성이 없으면 자동 생성자 주입을 시도합니다.
+   - findInjectableConstructor: @Injectable 어노테이션이 붙은 클래스의 생성자를 찾아 의존성을 자동으로 주입합니다.
+4. 예제 사용:
+   - UserRepository와 UserService는 @Injectable 어노테이션이 붙어있어 자동 주입이 가능합니다.
+   - UserModule은 UserRepository를 싱글톤으로, UserService를 일반 의존성으로 등록합니다.
+   - main 함수에서는 컨테이너를 생성하고, 모듈을 설치한 후 UserService를 해결하여 사용합니다.
+
+이 구현은 다음과 같은 장점을 가집니다:
+- 싱글톤과 일반 의존성을 모두 지원합니다. 
+- 자동 생성자 주입을 지원하여 보일러플레이트 코드를 줄입니다. 
+- 모듈 시스템을 통해 관련 의존성을 그룹화할 수 있습니다. 
+- 타입 안전성을 제공합니다.
+
+이 DIContainer는 소규모에서 중간 규모의 프로젝트에 적합하며, Dagger나 Hilt와 같은 프레임워크의 기본 개념을 이해하는 데 도움이 될 것입니다.
+
+### 6. 어노테이션 기반 의존성 주입 구현
