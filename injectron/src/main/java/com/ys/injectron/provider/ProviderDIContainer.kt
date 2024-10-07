@@ -158,6 +158,23 @@ class NumberPrinter(private val numberProvider: Provider<Int>) {
     }
 }
 
+@Injectable
+class StatisticsCollector(private val numberProvider: Provider<Int>) {
+    private val numbers = mutableListOf<Int>()
+
+    fun collectNumber() {
+        numbers.add(numberProvider.get())
+    }
+
+    fun getAverage(): Double {
+        return if (numbers.isEmpty()) {
+            0.0
+        } else {
+            numbers.average()
+        }
+    }
+}
+
 fun main() {
     val container = DIContainer()
     container.register<RandomNumberGenerator>()
