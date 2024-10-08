@@ -267,11 +267,10 @@ DI Container를 사용함으로써, 개발자는 비즈니스 로직에 더 집�
 7. 컴포넌트 스캔 기능
    - 특정 패키지 내의 @Injectable 클래스들을 자동으로 등록하는 기능
 
-8. Provider 패턴 지원
+8. [Provider 패턴 지원](#provider-패턴-지원)
    - 객체의 생성을 지연시키고, 필요할 때마다 새로운 인스턴스를 제공할 수 있게 해주는 유용한 기능입니다. 이는 이미 구현한 LazyInject와 유사하지만, 더 유연한 방식으로 객체 생성을 제어할 수 있습니다.
 
-9. 테스트 지원 기능
-   - 목(Mock) 객체를 쉽게 주입할 수 있는 기능 추가
+9. 비동기 Provider 패턴 지원
 
 
 ### [Lazy Injection 구현](./injectron/src/main/java/com/ys/injectron/lazy/LazyInjection.kt)
@@ -350,7 +349,7 @@ Qualifier를 사용함으로써 동일한 인터페이스의 여러 구현체를
 이 구현을 통해 복잡한 객체 생성 로직을 캡슐화하고, 런타임에 객체 생성 방식을 결정할 수 있게 되었습니다. 또한 Qualifier를 통해 같은 타입의 다른 구현을 제공할 수 있어 DI 컨테이너의 유연성이 크게 향상되었습니다.
 
 
-### Provider 패턴 지원
+### [Provider 패턴 지원](./injectron/src/main/java/com/ys/injectron/provider/ProviderDIContainer.kt)
 이 패턴은 객체의 생성을 지연시키고, 필요할 때마다 새로운 인스턴스를 제공할 수 있게 해주는 유용한 기능입니다. 이는 이미 구현한 LazyInject와 유사하지만, 더 유연한 방식으로 객체 생성을 제어할 수 있습니다.
 
 **Provider 패턴 코드 설명**
@@ -358,13 +357,51 @@ Qualifier를 사용함으로써 동일한 인터페이스의 여러 구현체를
 - DIContainer에 registerProvider와 resolveProvider 메서드를 추가하여 프로바이더를 등록하고 해결할 수 있게 합니다.
 - RandomNumberGenerator와 NumberPrinter 클래스를 사용하여 프로바이더 패턴의 사용 예를 보여줍니다.
 
-**Provider 패턴 테스트 코드 설명**
+**[Provider 패턴 테스트 코드 설명](./injectron/src/test/kotlin/com/ys/injectron/provider/ProviderDIContainerTest.kt)**
 - 테스트 코드에서는 프로바이더가 매번 새로운 숫자를 생성하는지 확인합니다.
 
 이 예제를 통해 프로바이더 패턴의 기본 개념과 사용법을 학습할 수 있습니다. 
 프로바이더 패턴은 객체 생성의 유연성을 높이고, 리소스 사용을 최적화하는 데 도움이 됩니다. 
 
 특히 안드로이드 개발에서 비용이 많이 드는 객체의 생성을 지연시키거나, 동적으로 객체를 생성해야 할 때 유용하게 사용할 수 있습니다.
+
+
+### [비동기 Provider 지원](./injectron/src/main/java/com/ys/injectron/provider/async/ProviderDIContainer.kt)
+**비동기 프로바이더의 장점:**
+
+1. 성능 최적화
+   - 무거운 작업을 비동기적으로 처리 
+   - 필요한 시점에 실행되어 리소스 효율적 사용
+
+2. 코드 가독성
+   - 비동기 코드를 깔끔하게 구조화
+   - 동기/비동기 의존성을 명확하게 구분
+
+
+3. 테스트 용이성
+   - 비동기 작업을 쉽게 모킹 가능
+   - 코루틴 테스트 도구 활용 가능
+
+
+**코드 주요 특징**
+1. 비동기 프로바이더 인터페이스
+   - AsyncProvider<T>는 suspend 함수를 통해 비동기 작업을 지원합니다.
+   - Provider<T>와 함께 사용하여 동기/비동기 작업을 모두 지원합니다.
+
+2. DIContainer 확장
+   - registerAsyncProvider와 resolveAsyncProvider 메서드 추가
+   - 비동기 의존성을 위한 별도의 맵(asyncDependencies) 관리
+   - 코루틴 스코프를 통한 비동기 작업 관리
+
+3. 실제 사용 예제
+   - AsyncDatabaseService: 데이터베이스 작업을 시뮬레이션하는 서비스
+   - CacheService: 캐싱 기능을 제공하는 서비스
+   - DataRepository: 캐시와 데이터베이스를 함께 사용하는 레포지토리
+
+4. 테스트
+   - 기본 비동기 프로바이더 기능 테스트
+   - 병렬 처리 테스트 
+   - 에러 처리 테스트
 
 
 ---
